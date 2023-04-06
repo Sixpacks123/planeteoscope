@@ -2,7 +2,13 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-  content: ['./index.html', './src/**/*.vue', './src/**/*.ts'],
+  content: [
+    './index.html',
+    './src/**/*.vue',
+    './src/**/*.ts',
+    './node_modules/flowbite/**/*.js',
+    'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}',
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -10,5 +16,9 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('flowbite/plugin'),
+  ],
 }
