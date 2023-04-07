@@ -2,7 +2,7 @@
 import { Navbar, NavbarLogo, NavbarCollapse, NavbarLink } from 'flowbite-vue'
 </script>
 <template>
-  <Navbar class="w-screen fixed w-full z-10 top-0">
+  <Navbar class="w-screen fixed block w-full z-10 top-0">
     <template #logo>
       <NavbarLogo
         link="https://www.google.com/"
