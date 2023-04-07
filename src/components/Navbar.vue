@@ -17,7 +17,9 @@ import { Navbar, NavbarLogo, NavbarCollapse, NavbarLink } from 'flowbite-vue'
         <NavbarLink is-active>
           Home
         </NavbarLink>
-        <NavbarLink>Liste des astres</NavbarLink>
+        <NavbarLink link="/astres">
+          Liste des astres
+        </NavbarLink>
         <NavbarLink>Système solaire</NavbarLink>
         <NavbarLink>Vos favoris</NavbarLink>
         <NavbarLink>Image du jours</NavbarLink>
