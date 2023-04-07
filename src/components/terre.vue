@@ -1,16 +1,23 @@
 <template>
   <div id="container">
-    <canvas />
+    <canvas
+      class="webgl"
+      :style="{ opacity: ready ? 1 : 0 }"
+    />
   </div>
 </template>
 
 <script>
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 export default {
-  name: 'EarthModel',
-
+  data() {
+    return {
+      ready: false,
+    }
+  },
   mounted() {
     // Set up scene
     const scene = new THREE.Scene()
@@ -18,12 +25,14 @@ export default {
     // Set up camera
     const width = this.$el.clientWidth
     const height = this.$el.clientHeight
-    const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000)
-    camera.position.z = 1
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+    camera.position.set(0, 0, 1)
+    scene.add(camera)
 
     // Set up renderer
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, canvas: this.$el.querySelector('canvas') })
-    renderer.setPixelRatio(window.devicePixelRatio)
+    renderer.setClearColor(0x000000, 0)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(width, height)
 
     // Resize the renderer when the window size changes
@@ -46,17 +55,47 @@ export default {
         scene.add(model.scene)
 
         // Add lighting to scene
-        const light = new THREE.DirectionalLight(0xffffff, 2)
-        light.position.set(0, 0, 1)
-        scene.add(light)
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1)
+        scene.add(ambientLight)
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5)
+        directionalLight.position.set(1, 1, 1)
+        scene.add(directionalLight)
+
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1.5)
+        directionalLight2.position.set(-1, -1, -1)
+        scene.add(directionalLight2)
+
+
+        // Set up controls
+        const controls = new OrbitControls(camera, this.$el)
+        controls.enableDamping = true
+        controls.enablePan = false
+        controls.enableZoom = false
+        controls.minPolarAngle = Math.PI / 2
+        controls.maxPolarAngle = Math.PI / 2
 
         // Animate the scene
+        const clock = new THREE.Clock()
+        let previousTime = 0
+
         const animate = () => {
           this.animationId = requestAnimationFrame(animate)
-          model.scene.rotation.y += 0.004
+          const elapsedTime = clock.getElapsedTime()
+          const deltaTime = elapsedTime - previousTime
+          previousTime = elapsedTime
+
+          model.scene.rotation.y += 0.5 * deltaTime
+
+          // Update controls
+          controls.update()
+
           renderer.render(scene, camera)
         }
         animate()
+
+        this.ready = true
       },
       (xhr) => {
         console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
@@ -97,5 +136,4 @@ canvas {
   width: 100%;
   height: 100%;
 }
-
 </style>
