@@ -88,6 +88,7 @@ export default {
 
           model.scene.rotation.y += 0.5 * deltaTime
 
+
           // Update controls
           controls.update()
 
