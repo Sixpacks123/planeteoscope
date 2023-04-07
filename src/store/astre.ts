@@ -30,14 +30,6 @@ export const useAstresStore = defineStore({
           aphelion: astre.aphelion,
           eccentricity: astre.eccentricity,
           inclination: astre.inclination,
-          mass: {
-            massValue: astre.mass.massValue,
-            massExponent: astre.mass.massExponent,
-          },
-          vol: {
-            volValue: astre.vol.volValue,
-            volExponent: astre.vol.volExponent,
-          },
           density: astre.density,
           gravity: astre.gravity,
           escape: astre.escape,
@@ -60,6 +52,47 @@ export const useAstresStore = defineStore({
           bodyType: astre.bodyType,
           rel: astre.rel,
         }))
+        // Ajouter Guillaume à la liste d'astres
+        // Ajouter Guillaume à la liste d'astres
+        this.astres.push({
+          mass:{
+           massValue:90,
+           massExponent:40,
+          }, vol: {
+            volValue:90,
+            volExponent:40,
+          },
+          alternativeName: '',
+          aphelion: 0,
+          moons: null, rel:'null',
+          argPeriapsis: 0,
+          aroundPlanet: null,
+          avgTemp: 0,
+          axialTilt: 0,
+          bodyType: '',
+          density: 0,
+          dimension: '',
+          discoveredBy: '',
+          discoveryDate: '',
+          eccentricity: 0,
+          equaRadius: 0,
+          escape: 0,
+          flattening: 0,
+          gravity: 0,
+          inclination: 0,
+          longAscNode: 0,
+          mainAnomaly: 0,
+          meanRadius: 0,
+          perihelion: 0,
+          polarRadius: 0,
+          semimajorAxis: 0,
+          sideralOrbit: 0,
+          sideralRotation: 0,
+          id: 'guillaume',
+          name: 'Guillaume',
+          englishName: 'Guillaume',
+          isPlanet: false,
+        })
       } catch (error) {
         console.error(error)
       }
