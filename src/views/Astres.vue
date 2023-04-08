@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-white dark:bg-gray-900 flex items-center justify-center">
+  <div class="bg-white dark:bg-gray-900 flex  items-center justify-center">
     <div class="py-10 px-4 mx-auto w-full sm:py-16 lg:px-6">
-      <div class=" mt-20  bg-white w-full">
-        <div class="py-2 px-4 mx-auto max-w-screen-xl ">
+      <div class=" mt-20  bg-white w-full ">
+        <div class="py-2 px-4 mx-auto max-w-screen-xl  ">
           <h1 class="text-6xl text-center font-extrabold pb-4">
             Liste des Astres
           </h1>
@@ -65,7 +65,7 @@
       </div>
       <div class="py-2 px-4 mx-auto max-w-screen-xl ">
         <div
-          v-if="filteredAstres"
+          v-if="filteredAstres.length > 0"
           class=" flex flex-row flex-wrap gap-5 w-full justify-between"
         >
           <the-card
@@ -76,18 +76,26 @@
             <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
               {{ astre.name }}
             </h5>
-            <p class="font-normal">
-              Planet: {{ astre.isPlanet }}
-            </p>
-            <p v-if="astre.moons === null || undefined">
-              Pas de lunes pour cet astre.
-            </p>
             <p
-              v-else
+              v-if="astre.isPlanet"
               class="font-normal"
             >
-              Nombre de lunes : {{ astre.moons.length }}
+              Cette astre est une planette
             </p>
+            <p v-else>
+              Cette astre n'est pas une planette
+            </p>
+            <div>
+              <p v-if="astre.moons === null || undefined">
+                Pas de lunes pour cet astre.
+              </p>
+              <p
+                v-else
+                class="font-normal"
+              >
+                Nombre de lunes : {{ astre.moons.length }}
+              </p>
+            </div>
 
             <router-link :to="{ name: 'AstreDetail', params: { id: astre.id } }">
               <Button
@@ -99,15 +107,21 @@
             </router-link>
           </the-card>
         </div>
-        <div v-else>
-          lofing ..
+        <div
+          v-else
+          class="flex justify-center items-center w-full py-8"
+        >
+          <spinner
+            color="blue"
+            size="6"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { TheCard, Button,Dropdown,ListGroup, ListGroupItem  } from 'flowbite-vue'
+import { TheCard, Button,Dropdown,ListGroup, Spinner,ListGroupItem  } from 'flowbite-vue'
 import { ref, onMounted, computed } from 'vue'
 import { useAstresStore } from '../store/astre'
 
