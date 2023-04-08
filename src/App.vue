@@ -2,7 +2,10 @@
   <div>
     <Navbar />
     <div>
-      <router-view />
+      <router-view
+        :key="$route.fullPath"
+        class="bg-white"
+      />
     </div>
   </div>
 </template>
