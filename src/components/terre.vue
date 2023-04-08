@@ -47,9 +47,9 @@ export default {
     // Load Earth model
     const loader = new GLTFLoader()
     loader.load(
-      'src/assets/models/earth.glb',
+      'src/assets/models/mars.glb',
       (model) => {
-        model.scene.scale.set(0.5, 0.5, 0.5)
+        model.scene.scale.set(0.8, 0.8, 0.8)
         model.scene.rotation.y = -Math.PI / 2
 
         scene.add(model.scene)
@@ -59,11 +59,11 @@ export default {
         const ambientLight = new THREE.AmbientLight(0xffffff, 1)
         scene.add(ambientLight)
 
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5)
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2)
         directionalLight.position.set(1, 1, 1)
         scene.add(directionalLight)
 
-        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1.5)
+        const directionalLight2 = new THREE.DirectionalLight(0xffffff, 1.2)
         directionalLight2.position.set(-1, -1, -1)
         scene.add(directionalLight2)
 
