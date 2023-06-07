@@ -2,7 +2,7 @@
 import { Navbar, NavbarLogo, NavbarCollapse, NavbarLink } from 'flowbite-vue'
 </script>
 <template>
-  <Navbar class="w-screen fixed block w-full z-10 top-0">
+  <Navbar class="w-screen fixed block w-full  top-0">
     <template #logo>
       <NavbarLogo
         link="https://www.google.com/"
@@ -20,8 +20,12 @@ import { Navbar, NavbarLogo, NavbarCollapse, NavbarLink } from 'flowbite-vue'
         <NavbarLink link="/astres">
           Liste des astres
         </NavbarLink>
-        <NavbarLink>Système solaire</NavbarLink>
-        <NavbarLink>Vos favoris</NavbarLink>
+        <NavbarLink link="/system">
+          Système solaire
+        </NavbarLink>
+        <NavbarLink link="/fav">
+          Vos favoris
+        </NavbarLink>
         <NavbarLink>Image du jours</NavbarLink>
       </NavbarCollapse>
     </template>
