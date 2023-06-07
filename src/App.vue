@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="">
     <Navbar />
-    <div>
+    <div class="mt-20">
       <router-view
         :key="$route.fullPath"
         class="bg-white"
@@ -18,3 +18,6 @@ export default defineComponent({
   components: { Navbar },
 })
 </script>
+<style>
+
+</style>
