@@ -5,6 +5,6 @@
     { "source": "^/fav$", "destination": "/favorites.html" },
     { "source": "^/system$", "destination": "/system.html" },
     { "source": "^/images$", "destination": "/image-of-the-day.html" },
-    { "source": "^/.*$", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
