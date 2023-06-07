@@ -112,9 +112,9 @@
 import { ref, onMounted, computed } from 'vue'
 import { useAstresStore } from '../store/astre'
 import { TheCard, Button, Dropdown, ListGroup, ListGroupItem, Spinner, Toast } from 'flowbite-vue'
-import { toast } from 'vue3-toastify'
 import SearchInput from '../components/SearchInput.vue'
 import SkeletonCard from '../components/skeletonCard.vue'
+import {useWarning, useSuccess} from '../composable/notif'
 
 const astresStore = useAstresStore()
 const astres = ref([])
@@ -157,22 +157,13 @@ const filteredAstres = computed(() => {
 const toggleFavorite = (astre) => {
   if (astre.isFavorite) {
     astresStore.removeFromFavorites(astre.id)
-    warning(astre.name)
-  } else {
+    useWarning(astre.name)  } else {
     astresStore.addToFavorites(astre.id)
-    success(astre.name)
+    useSuccess(astre.name)
   }
 }
 
-const success = (astre) => {
-  toast.success(`${astre} ajouté au favoris`, {
-    position: toast.POSITION.TOP_RIGHT,
-  })
-}
 
-const warning = (astre) => {
-  toast.error(`${astre} supprimé des favoris`, {
-    position: toast.POSITION.TOP_RIGHT,
-  })
-}
+
+
 </script>

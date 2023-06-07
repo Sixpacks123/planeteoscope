@@ -94,12 +94,13 @@ export const useAstresStore = defineStore('astres', {
     persistFavorites() {
       const favorites = this.astres
         .filter(astre => astre.isFavorite)
-        .map(astre => astre.id)
+        .map(astre => astre)
       localStorage.setItem('favorites', JSON.stringify(favorites))
     },
 
     getFavorites() {
-      return JSON.parse(localStorage.getItem('favorites') || '[]')
+      const favorites = localStorage.getItem('favorites')
+      return favorites ? JSON.parse(favorites) : []
     },
   },
 

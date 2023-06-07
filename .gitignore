@@ -6,3 +6,5 @@ dist
 .idea
 .editorconfig
 .husky
+yarn.lock
+.vercel

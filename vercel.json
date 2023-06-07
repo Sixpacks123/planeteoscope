@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "^/astres/([^/]+)$", "destination": "/astres/AstreDetail" },
+    { "source": "^/about$", "destination": "/about-our-company.html" },
+    { "source": "^/fav$", "destination": "/favorites.html" },
+    { "source": "^/system$", "destination": "/system.html" },
+    { "source": "^/images$", "destination": "/image-of-the-day.html" },
+    { "source": "^/.*$", "destination": "/index.html" }
+  ]
+}
