@@ -1,106 +1,110 @@
 import { defineStore } from 'pinia'
+
 import { Astre } from '../type/astres'
 
 interface AstresState {
   astres: Astre[];
 }
 
-export const useAstresStore = defineStore({
-  id: 'astres',
-
+export const useAstresStore = defineStore('astres', {
   state: (): AstresState => ({
     astres: [],
   }),
 
   actions: {
     async fetchAstres() {
+      if (this.astres.length > 0) {
+        return // La liste d'astres est déjà remplie, retourner sans effectuer la requête
+      }
+
       try {
         const response = await fetch('https://api.le-systeme-solaire.net/rest/bodies/')
         const data = await response.json()
 
-        // Map each Astre object to extract all the necessary fields, including the ID
-        this.astres = data.bodies.map((astre: Astre) => ({
-          id: astre.id,
-          name: astre.name,
-          englishName: astre.englishName,
-          isPlanet: astre.isPlanet,
-          moons: astre.moons,
-          semimajorAxis: astre.semimajorAxis,
-          perihelion: astre.perihelion,
-          aphelion: astre.aphelion,
-          eccentricity: astre.eccentricity,
-          inclination: astre.inclination,
-          density: astre.density,
-          gravity: astre.gravity,
-          escape: astre.escape,
-          meanRadius: astre.meanRadius,
-          equaRadius: astre.equaRadius,
-          polarRadius: astre.polarRadius,
-          flattening: astre.flattening,
-          dimension: astre.dimension,
-          sideralOrbit: astre.sideralOrbit,
-          sideralRotation: astre.sideralRotation,
-          aroundPlanet: astre.aroundPlanet,
-          discoveredBy: astre.discoveredBy,
-          discoveryDate: astre.discoveryDate,
-          alternativeName: astre.alternativeName,
-          axialTilt: astre.axialTilt,
-          avgTemp: astre.avgTemp,
-          mainAnomaly: astre.mainAnomaly,
-          argPeriapsis: astre.argPeriapsis,
-          longAscNode: astre.longAscNode,
-          bodyType: astre.bodyType,
-          rel: astre.rel,
+        const astres = data.bodies.map((astre: Astre) => ({
+          ...astre,
+          isFavorite: false,
         }))
-        // Ajouter Guillaume à la liste d'astres
-        // Ajouter Guillaume à la liste d'astres
-        this.astres.push({
-          mass:{
-           massValue:90,
-           massExponent:40,
-          }, vol: {
-            volValue:90,
-            volExponent:40,
-          },
-          alternativeName: '',
-          aphelion: 0,
-          moons: null, rel:'null',
-          argPeriapsis: 0,
-          aroundPlanet: null,
-          avgTemp: 0,
-          axialTilt: 0,
-          bodyType: '',
-          density: 0,
-          dimension: '',
-          discoveredBy: '',
-          discoveryDate: '',
-          eccentricity: 0,
-          equaRadius: 0,
-          escape: 0,
-          flattening: 0,
-          gravity: 0,
-          inclination: 0,
-          longAscNode: 0,
-          mainAnomaly: 0,
-          meanRadius: 0,
-          perihelion: 0,
-          polarRadius: 0,
-          semimajorAxis: 0,
-          sideralOrbit: 0,
-          sideralRotation: 0,
+
+        const guillaumeAstre: Astre = {
           id: 'guillaume',
-          name: 'Guillaume',
+          name: 'Guillaume La lune',
           englishName: 'Guillaume',
           isPlanet: false,
+          moons: null,
+          semimajorAxis: 0,
+          perihelion: 0,
+          aphelion: 0,
+          eccentricity: 0,
+          inclination: 0,
+          density: 0,
+          gravity: 0,
+          escape: 0,
+          meanRadius: 0,
+          equaRadius: 0,
+          polarRadius: 0,
+          flattening: 0,
+          dimension: '',
+          sideralOrbit: 0,
+          sideralRotation: 0,
+          aroundPlanet: null,
+          discoveredBy: '',
+          discoveryDate: '',
+          alternativeName: '',
+          axialTilt: 0,
+          avgTemp: 0,
+          mainAnomaly: 0,
+          argPeriapsis: 0,
+          longAscNode: 0,
+          bodyType: '',
+          rel: null,
+          isFavorite: false,
+        }
+
+        // Check if favorite Astres exist in localStorage
+        const favorites = this.getFavorites()
+        astres.forEach(astre => {
+          if (favorites.includes(astre.id)) {
+            astre.isFavorite = true
+          }
         })
+
+        this.astres = [...astres, guillaumeAstre]
       } catch (error) {
         console.error(error)
       }
     },
+
+    addToFavorites(id: string) {
+      const astre = this.astres.find(astre => astre.id === id)
+      if (astre) {
+        astre.isFavorite = true
+        this.persistFavorites()
+      }
+    },
+
+    removeFromFavorites(id: string) {
+      const astre = this.astres.find(astre => astre.id === id)
+      if (astre) {
+        astre.isFavorite = false
+        this.persistFavorites()
+      }
+    },
+
+    persistFavorites() {
+      const favorites = this.astres
+        .filter(astre => astre.isFavorite)
+        .map(astre => astre.id)
+      localStorage.setItem('favorites', JSON.stringify(favorites))
+    },
+
+    getFavorites() {
+      return JSON.parse(localStorage.getItem('favorites') || '[]')
+    },
   },
 
   getters: {
-    getAstreById: state => (id: string) => {
+    getAstreById: (state) => (id: string) => {
       return state.astres.find(astre => astre.id === id)
     },
   },
