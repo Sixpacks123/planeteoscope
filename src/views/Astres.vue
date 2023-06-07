@@ -1,59 +1,25 @@
 <template>
-  <div class="bg-white dark:bg-gray-900 flex  items-center justify-center">
-    <div class="py-10 px-4 mx-auto w-full sm:py-16 lg:px-6">
-      <div class=" mt-20  bg-white w-full ">
-        <div class="py-2 px-4 mx-auto max-w-screen-xl  ">
+  <div class="dark:bg-gray-900 flex items-center justify-center">
+    <div class="py-10 mx-auto w-full sm:py-16 lg:px-6">
+      <div class="w-full">
+        <div class="py-2 px-4 mx-auto max-w-screen-xl">
           <h1 class="text-6xl text-center font-extrabold pb-4">
             Liste des Astres
           </h1>
-          <div class="flex flex-row items-center gap-x-4">
+          <div class="flex flex-row items-center space-x-4">
             <div class="w-full">
-              <label
-                for="default-search"
-                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-              >Search</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg
-                    aria-hidden="true"
-                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  ><path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  /></svg>
-                </div>
-                <input
-                  id="default-search"
-                  v-model="searchTerm"
-                  type="search"
-                  class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Recherche un astre"
-                  required
-                >
-                <button
-                  type="submit"
-                  class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >
-                  Search
-                </button>
-              </div>
+              <SearchInput @search="handleSearch" />
             </div>
-            <dropdown text="Triez">
+            <dropdown text="Trier">
               <list-group>
                 <list-group-item @click="selectedType = null">
-                  All Astres
+                  Tous les astres
                 </list-group-item>
                 <list-group-item @click="selectedType = true">
-                  Planets
+                  Planètes
                 </list-group-item>
                 <list-group-item @click="selectedType = false">
-                  Non-planets
+                  Non-planètes
                 </list-group-item>
                 <list-group-item @click="selectedType = 'moon'">
                   Possède des lunes
@@ -63,30 +29,31 @@
           </div>
         </div>
       </div>
-      <div class="py-2 px-4 mx-auto max-w-screen-xl ">
+      <div class="py-2 px-4">
         <div
           v-if="filteredAstres.length > 0"
-          class=" flex flex-row flex-wrap gap-5 w-full justify-between"
+          v-auto-animate
+          class="flex flex-wrap py-2 justify-center"
         >
           <the-card
             v-for="astre in filteredAstres"
             :key="astre.id"
-            class="w-2/4"
+            class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 m-2"
           >
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
               {{ astre.name }}
             </h5>
             <p
               v-if="astre.isPlanet"
               class="font-normal"
             >
-              Cette astre est une planette
+              Cette astre est une planète
             </p>
             <p v-else>
-              Cette astre n'est pas une planette
+              Cette astre n'est pas une planète
             </p>
             <div>
-              <p v-if="astre.moons === null || undefined">
+              <p v-if="astre.moons === null || astre.moons === undefined">
                 Pas de lunes pour cet astre.
               </p>
               <p
@@ -96,34 +63,58 @@
                 Nombre de lunes : {{ astre.moons.length }}
               </p>
             </div>
-
-            <router-link :to="{ name: 'AstreDetail', params: { id: astre.id } }">
-              <Button
-                :to="{ name: 'AstreDetail', params: { id: astre.id } }"
-                color="default"
+            <div class="flex justify-between mt-4">
+              <router-link :to="{ name: 'AstreDetail', params: { id: astre.id } }">
+                <Button
+                  :to="{ name: 'AstreDetail', params: { id: astre.id } }"
+                  color="default"
+                >
+                  Détails
+                </Button>
+              </router-link>
+              <button
+                class="h-6 w-6 cursor-pointer text-gray-500 hover"
+                :class="astre.isFavorite ? 'text-red-500' : ''"
+                @click="toggleFavorite(astre)"
               >
-                Details
-              </Button>
-            </router-link>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  :class="astre.isFavorite ? 'text-red-500' : 'text-gray-500'"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+                    :class="astre.isFavorite ? 'fill-red-500' : ''"
+                  />
+                </svg>
+              </button>
+            </div>
           </the-card>
         </div>
         <div
           v-else
-          class="flex justify-center items-center w-full py-8"
+          class="w-full py-8"
         >
-          <spinner
-            color="blue"
-            size="6"
-          />
+          <SkeletonCard />
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
-import { TheCard, Button,Dropdown,ListGroup, Spinner,ListGroupItem  } from 'flowbite-vue'
 import { ref, onMounted, computed } from 'vue'
 import { useAstresStore } from '../store/astre'
+import { TheCard, Button, Dropdown, ListGroup, ListGroupItem, Spinner, Toast } from 'flowbite-vue'
+import { toast } from 'vue3-toastify'
+import SearchInput from '../components/SearchInput.vue'
+import SkeletonCard from '../components/skeletonCard.vue'
 
 const astresStore = useAstresStore()
 const astres = ref([])
@@ -140,13 +131,13 @@ onMounted(async () => {
 
 const searchTerm = ref('')
 const selectedType = ref(null)
-const countMoons = (astre) => {
-  console.log(astre.moons)
+const handleSearch = (value) => {
+  searchTerm.value = value
 }
 // Filter the astres based on the search term and planet filter
 const filteredAstres = computed(() => {
   const term = searchTerm.value.toLowerCase()
-  return astres.value.filter(astre => {
+  return astres.value.filter((astre) => {
     if (typeof astre.name !== 'string') {
       return false
     }
@@ -163,5 +154,25 @@ const filteredAstres = computed(() => {
   })
 })
 
+const toggleFavorite = (astre) => {
+  if (astre.isFavorite) {
+    astresStore.removeFromFavorites(astre.id)
+    warning(astre.name)
+  } else {
+    astresStore.addToFavorites(astre.id)
+    success(astre.name)
+  }
+}
 
+const success = (astre) => {
+  toast.success(`${astre} ajouté au favoris`, {
+    position: toast.POSITION.TOP_RIGHT,
+  })
+}
+
+const warning = (astre) => {
+  toast.error(`${astre} supprimé des favoris`, {
+    position: toast.POSITION.TOP_RIGHT,
+  })
+}
 </script>
