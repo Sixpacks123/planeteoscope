@@ -47,7 +47,7 @@ export default {
     // Load Earth model
     const loader = new GLTFLoader()
     loader.load(
-      'src/assets/models/mars.glb',
+      'public/static/assets/models/mars.glb',
       (model) => {
         model.scene.scale.set(0.8, 0.8, 0.8)
         model.scene.rotation.y = -Math.PI / 2

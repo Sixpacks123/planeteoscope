@@ -7,7 +7,7 @@ import { Navbar, NavbarLogo, NavbarCollapse, NavbarLink } from 'flowbite-vue'
       <NavbarLogo
         link="https://www.google.com/"
         alt="logo"
-        image-url="/src/assets/planetes.png"
+        image-url="/public/static/image/planetes.png"
       >
         PlanétoScope
       </NavbarLogo>

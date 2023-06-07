@@ -197,7 +197,7 @@ export default {
       const planets = [] // List of Object3D of planets
       for(let planet of PLANETS) {
         // Load 3D model
-        let gltf = await loader.loadAsync(`./assets/gltf/${planet.name}.glb`)
+        let gltf = await loader.loadAsync(`/public/static/assets/gltf/${planet.name}.glb`)
         let updateObject
         let userData = this.getUserDataFor(planet)
         // Get the object the planet is orbitting
@@ -337,12 +337,12 @@ export default {
       const backgroundScene = new THREE.Scene()
       const loader = new THREE.CubeTextureLoader()
       backgroundScene.background = loader.load([
-        './assets/universe.jpg',
-        './assets/universe.jpg',
-        './assets/universe.jpg',
-        './assets/universe.jpg',
-        './assets/universe.jpg',
-        './assets/universe.jpg',
+        'public/static/assets/universe.jpg',
+        'public/static/assets/universe.jpg',
+        'public/static/assets/universe.jpg',
+        'public/static/assets/universe.jpg',
+        'public/static/assets/universe.jpg',
+        'public/static/assets/universe.jpg',
       ])
 
       return backgroundScene
