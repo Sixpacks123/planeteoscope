@@ -6,12 +6,24 @@ import Terre from '../components/terre.vue'
     <section class=" bg-white dark:bg-gray-900 flex items-center justify-center">
       <div class="grid max-w-screen-xl h-screen px-4 py-8 mx-auto lg:gap-8 xl:gap-6 lg:py-16 lg:grid-cols-12">
         <div class="mr-auto place-self-center lg:col-span-6">
-          <h1 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
-            Explorez le cosmos avec PlanétoScope
-          </h1>
-          <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
-            Découvrez les caractéristiques fascinantes de chaque planète de notre système solaire grâce à PlanétoScope, une application éducative et immersive basée sur des données en temps réel de la NASA.
-          </p>
+          <div
+            v-motion-roll-left
+            :initial="{
+              opacity: 0,
+              y: 100,
+            }"
+            :enter="{
+              opacity: 1,
+              y: 0,
+            }"
+          >
+            <h1 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
+              Explorez le cosmos avec PlanétoScope
+            </h1>
+            <p class="max-w-2xl mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
+              Découvrez les caractéristiques fascinantes de chaque planète de notre système solaire grâce à PlanétoScope, une application éducative et immersive basée sur des données en temps réel de la NASA.
+            </p>
+          </div>
         </div>
         <div class="hidden lg:mt-0 lg:col-span-6 lg:flex">
           <terre />
