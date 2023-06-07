@@ -41,4 +41,5 @@ export interface Astre {
   longAscNode: number;
   bodyType: string;
   rel: string;
+  isFavorite: boolean;
 }
