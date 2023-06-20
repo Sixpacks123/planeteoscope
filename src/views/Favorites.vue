@@ -11,6 +11,7 @@
             :key="astre.id"
             class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 m-2"
           >
+            {{ astre }}
             <h5 class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
               {{ astre.name }}
             </h5>
@@ -43,6 +44,10 @@
                   Détails
                 </Button>
               </router-link>
+              <BaseButton
+                label="enlever des favs"
+                @click="toggleFavorite(astre)"
+              />
               <button
                 class="h-6 w-6 cursor-pointer text-gray-500 hover"
                 :class="astre.isFavorite ? 'text-red-500' : ''"
@@ -72,22 +77,27 @@
     </div>
   </div>
 </template>
-<script setup>
-import { useAstresStore } from '../store/astre'
-import { Button, TheCard } from 'flowbite-vue'
-import { useWarning } from '../composable/notif'
-import { computed } from 'vue'
 
-const astresStore = useAstresStore()
-const favoriteAstres = computed(() => astresStore.getFavorites())
+<script setup>
+import { TheCard,Button } from 'flowbite-vue'
+import { useWarning } from '../composable/notif'
+import { computed, onMounted } from 'vue'
+import { useFavoritesStore } from '../store/favorites'
+import BaseButton from '../components/Base/BaseButton.vue'
+
+const favoritesStore = useFavoritesStore()
+const favoriteAstres = computed(() => favoritesStore.favorites)
+
+onMounted(()=> {
+  favoritesStore.loadFavorites()
+})
+
 const toggleFavorite = (astre) => {
   if (astre.isFavorite) {
-    astresStore.removeFromFavorites(astre.id)
+    favoritesStore.removeFromFavorites(astre.id)
     useWarning(astre.name)
   } else {
+    favoritesStore.addToFavorites(astre.id)
   }
 }
-
-console.log(favoriteAstres.value)
 </script>
-

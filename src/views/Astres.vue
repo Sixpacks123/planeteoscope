@@ -12,16 +12,19 @@
             </div>
             <dropdown text="Trier">
               <list-group>
-                <list-group-item @click="selectedType = null">
+                <list-group-item @click="state.selectedType = null">
                   Tous les astres
                 </list-group-item>
-                <list-group-item @click="selectedType = true">
+                <list-group-item @click="state.selectedType = true">
                   Planètes
                 </list-group-item>
-                <list-group-item @click="selectedType = false">
+                <list-group-item @click="state.selectedType = false">
                   Non-planètes
                 </list-group-item>
-                <list-group-item @click="selectedType = 'moon'">
+                <list-group-item @click="state.selectedType = 'favorite'">
+                  favories
+                </list-group-item>
+                <list-group-item @click="state.selectedType = 'moon'">
                   Possède des lunes
                 </list-group-item>
               </list-group>
@@ -64,14 +67,12 @@
               </p>
             </div>
             <div class="flex justify-between mt-4">
-              <router-link :to="{ name: 'AstreDetail', params: { id: astre.id } }">
-                <Button
-                  :to="{ name: 'AstreDetail', params: { id: astre.id } }"
-                  color="default"
-                >
-                  Détails
-                </Button>
-              </router-link>
+              <BaseButton
+                :to="{ name: 'AstreDetail', params: { id: astre.id } }"
+                color="info"
+                label="details"
+              />
+
               <button
                 class="h-6 w-6 cursor-pointer text-gray-500 hover"
                 :class="astre.isFavorite ? 'text-red-500' : ''"
@@ -109,61 +110,67 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useAstresStore } from '../store/astre'
-import { TheCard, Button, Dropdown, ListGroup, ListGroupItem, Spinner, Toast } from 'flowbite-vue'
-import SearchInput from '../components/SearchInput.vue'
+import { useFavoritesStore } from '../store/favorites'
 import SkeletonCard from '../components/skeletonCard.vue'
-import {useWarning, useSuccess} from '../composable/notif'
+import BaseButton from '../components/Base/BaseButton.vue'
+import { Dropdown, ListGroup, ListGroupItem, TheCard } from 'flowbite-vue'
+import SearchInput from '../components/SearchInput.vue'
+import { useSuccess, useWarning } from '../composable/notif'
 
 const astresStore = useAstresStore()
-const astres = ref([])
+const favoritesStore = useFavoritesStore()
 
-// Fetch the astres when the component is mounted
 onMounted(async () => {
   try {
     await astresStore.fetchAstres()
-    astres.value = astresStore.astres
+    favoritesStore.loadFavorites()
   } catch (error) {
     console.error(error)
   }
 })
 
-const searchTerm = ref('')
-const selectedType = ref(null)
+const state = ref({
+  searchTerm: '',
+  selectedType: null,
+})
+
 const handleSearch = (value) => {
-  searchTerm.value = value
+  state.value.searchTerm = value
 }
-// Filter the astres based on the search term and planet filter
+
+function applyFilter(astre) {
+  const term = state.value.searchTerm.toLowerCase()
+  if (typeof astre.name !== 'string') {
+    return false
+  }
+  if (state.value.selectedType === true && !astre.isPlanet) {
+    return false
+  }
+  if (state.value.selectedType === false && astre.isPlanet) {
+    return false
+  }
+  if (state.value.selectedType === 'moon' && astre.moons === null) {
+    return false
+  }
+  if (state.value.selectedType === 'favorite' && !astre.isFavorite) {
+    return false
+  }
+  return astre.name.toLowerCase().includes(term)
+}
+
 const filteredAstres = computed(() => {
-  const term = searchTerm.value.toLowerCase()
-  return astres.value.filter((astre) => {
-    if (typeof astre.name !== 'string') {
-      return false
-    }
-    if (selectedType.value === true && !astre.isPlanet) {
-      return false
-    }
-    if (selectedType.value === false && astre.isPlanet) {
-      return false
-    }
-    if (selectedType.value === 'moon' && astre.moons === null) {
-      return false
-    }
-    return astre.name.toLowerCase().includes(term)
-  })
+  return astresStore.astres.filter(applyFilter)
 })
 
 const toggleFavorite = (astre) => {
   if (astre.isFavorite) {
-    astresStore.removeFromFavorites(astre.id)
-    useWarning(astre.name)  } else {
-    astresStore.addToFavorites(astre.id)
+    favoritesStore.removeFromFavorites(astre.id)
+    useWarning(astre.name)
+  } else {
+    favoritesStore.addToFavorites(astre.id)
     useSuccess(astre.name)
   }
 }
-
-
-
-
 </script>
