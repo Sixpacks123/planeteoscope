@@ -23,9 +23,6 @@ import { Navbar, NavbarLogo, NavbarCollapse, NavbarLink } from 'flowbite-vue'
         <NavbarLink link="/system">
           Système solaire
         </NavbarLink>
-        <NavbarLink link="/fav">
-          Vos favoris
-        </NavbarLink>
         <NavbarLink link="/images">
           Image du jours
         </NavbarLink>
