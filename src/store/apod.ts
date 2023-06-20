@@ -33,7 +33,7 @@ export const useApodStore = defineStore('apod', {
         this.error = null
 
         const baseUrl = 'https://api.nasa.gov/planetary/apod'
-        const apiKey = 'lYjFHh0CKwBGbh1brV4QDFvqfUcDos4PgEYrzV7L' // Remplacez par votre clé API de la NASA
+        const apiKey = import.meta.env.apikey
 
         const url = new URL(baseUrl)
         url.searchParams.set('api_key', apiKey)
