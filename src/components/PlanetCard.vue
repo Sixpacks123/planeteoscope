@@ -2,7 +2,7 @@
   <div class="planet-card">
     <img
       class="planet-img"
-      :src="`./assets/cards/${planetInfo.name}.png`"
+      :src="`public/static/assets/cards/${planetInfo.name}.png`"
       :alt="planetInfo.displayName"
     >
     <div class="title">
@@ -151,7 +151,6 @@ export default {
   props: {
     // eslint-disable-next-line vue/require-default-prop
     planetInfo: Object,
-    default: undefined,
   },
   emits: ['closeCard'],
   data() {
@@ -183,28 +182,179 @@ export default {
 </script>
 
 <style scoped>
-canvas {
-  width: 100vw;
-  height: 100vh;
+:root{
+  --primary: #191C44;
+  --secondary: #1A1D79;
+  --tertiary: #0587cc;
+  --text: #F3F3F3;
+  --dark: #05051A;
+  --radius: 18px;
+}
+.planet-card {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 280px;
+  box-shadow: -8px -9px 14px rgb(255 255 255 / 8%);
+  overflow: hidden;
+  font-size: 14px;
+  background-color: var(--primary) ;
 }
 
-.date-display {
+.planet-card .planet-img {
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  padding: 1em;
-  display: flex;
-  gap: 8px;
+  right: 0;
+  z-index: -1;
+  border-radius: var(--radius);
+  background-color: var(--primary);
 }
 
-.date-display.disabled {
-  opacity: 0.2;
+.planet-card .info {
+  margin-top: 150px;
+  min-height: 250px;
+  width: 100%;
+  border-radius: var(--radius);
+  background: linear-gradient(131.76deg, var(--primary) -34.78%, var(--dark) 93.37%);
+  padding: 6px 12px;
+}
+
+.planet-card .info h5 {
+  text-align: center;
+  font-size: 18px;
+  color: var(--tertiary);
+  font-weight: 100;
+}
+
+.planet-card .info ul {
+  margin: 10px 0;
+  text-align: left;
+  list-style: none;
+  padding-left: 0;
+}
+
+.planet-card .info ul li {
+  margin: 4px 0;
+  color: #d5d5d5;
+}
+
+.planet-card .info ul li .value {
+  font-weight: bold;
+  color: #fff;
+}
+
+.planet-card .title {
+  position: absolute;
+  text-align: center;
+  top: 2px;
+  width: 100%;
+}
+
+.planet-card .title h2 {
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 20px;
+}
+
+.planet-card .temperature {
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  font-weight: 600;
+  text-shadow: -4px 1px 11px #000;
+  font-size: 14px;
+  font-weight: lighter;
+}
+
+.planet-card .temperature .value {
+  font-weight: bold;
+  text-shadow: 0 0 10px #fff;
+}
+
+.planet-card .temperature .icon {
+  vertical-align: middle;
+}
+
+.planet-card .close {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  background-color: transparent;
+  border: 0;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.planet-card .description {
+  margin: 6px 0;
+  color: #fff;
 }
 
 @media (max-width: 560px) {
-  .date-display {
-    top: 16px;
+  .planet-card {
+    width: auto;
+    height: auto;
+    transform: none;
+    top: 125px;
+    left: 10px;
+    right: 10px;
+    bottom: 20px;
+    z-index: 4;
+  }
+
+  .planet-card .info {
+    top: 250px;
+  }
+
+  .planet-card .close {
+    font-size: 32px;
   }
 }
+
+@media (max-height: 360px) {
+  .planet-card {
+    width: auto;
+    height: auto;
+    transform: none;
+    top: 15px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    z-index: 4;
+  }
+
+  .planet-card .planet-img {
+    height: 100%;
+    width: auto;
+  }
+
+  .planet-card .info {
+    top: 0;
+    right: 0;
+    width: auto;
+    height: 100%;
+    left: 230px;
+  }
+
+  .planet-card .title {
+    max-width: 250px;
+  }
+
+  .planet-card .temperature {
+    left: 110px;
+    right: auto;
+  }
+
+  .planet-card .close {
+    right: auto;
+    left: 6px;
+    font-size: 32px;
+  }
+}
+
 </style>
 

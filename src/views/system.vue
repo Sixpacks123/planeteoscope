@@ -30,10 +30,11 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { PLANETS } from '../constant'
 import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js'
+import { PLANETS } from '../constant'
 import Options from '../components/Options.vue'
 import PlanetCard from '../components/PlanetCard.vue'
+
 const loader = new GLTFLoader()
 
 export default {
@@ -78,7 +79,7 @@ export default {
     const raycaster = new THREE.Raycaster()
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    THREE.Object3D.prototype.tick = () => {}
+    THREE.Object3D.prototype.tick = (e) => {}
 
     let hoverObject = {
       planet: null,
@@ -197,7 +198,7 @@ export default {
       const planets = [] // List of Object3D of planets
       for(let planet of PLANETS) {
         // Load 3D model
-        let gltf = await loader.loadAsync(`/public/static/assets/gltf/${planet.name}.glb`)
+        let gltf = await loader.loadAsync(`public/static/assets/gltf/${planet.name}.glb`)
         let updateObject
         let userData = this.getUserDataFor(planet)
         // Get the object the planet is orbitting
@@ -326,7 +327,9 @@ export default {
       }
     },
     createScene: function() {
-      return new THREE.Scene()
+      const scene = new THREE.Scene()
+
+      return scene
     },
     // Create and cofigure camera and return it
     createCamera: function () {
@@ -393,8 +396,8 @@ export default {
 
       const textureLoader = new THREE.TextureLoader()
 
-      const textureFlare0 = textureLoader.load( './assets/textures/lensflare0.png' )
-      const textureFlare1 = textureLoader.load( './assets/textures/lensflare1.png' )
+      const textureFlare0 = textureLoader.load( 'public/static/assets/textures/lensflare0.png' )
+      const textureFlare1 = textureLoader.load( 'public/static/assets/textures/lensflare1.png' )
 
       const lensflare = new Lensflare()
       lensflare.layers.enable(1)
@@ -510,12 +513,11 @@ export default {
 }
 </script>
 
-<style scoped>
-canvas {
+<style scoped lang="css">
+canvas{
   width: 100vw;
   height: 100vh;
 }
-
 .date-display {
   position: absolute;
   top: 0;
@@ -523,16 +525,13 @@ canvas {
   padding: 1em;
   display: flex;
   gap: 8px;
+  &.disabled{
+    opacity: 0.2;
+  }
 }
-
-.date-display.disabled {
-  opacity: 0.2;
-}
-
 @media (max-width: 560px) {
   .date-display {
     top: 16px;
   }
 }
 </style>
-
