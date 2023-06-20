@@ -1,5 +1,5 @@
 <script setup>
-import Terre from '../components/terre.vue'
+import Terre from '../components/HomePlanet.vue'
 </script>
 <template>
   <div>
