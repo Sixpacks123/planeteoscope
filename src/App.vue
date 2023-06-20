@@ -10,14 +10,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import Navbar from './components/Navbar.vue'
-
-export default defineComponent({
-  components: { Navbar },
-})
 </script>
-<style>
 
-</style>
